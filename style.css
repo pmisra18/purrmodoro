@@ -1,26 +1,30 @@
 /* -------------------------------------------------------------
-   PURRMODORO - Polished Blush Medical Sanctuary Aesthetic
+   PURRMODORO - Sakura Blossom Voxel Aesthetic
    ------------------------------------------------------------- */
 :root {
-  --bg-cream: #FAF6F0;
+  --bg-cream: #FDF7F4;
   --bg-card: #FFFFFF;
-  --blush-100: #FFF5F2;
-  --blush-200: #FCEEE9;
-  --blush-300: #F4C4B8;
-  --blush-primary: #E8A598;
-  --blush-dark: #D48C7F;
+  --blush-100: #FFF3F6;
+  --blush-200: #FCE8ED;
+  --blush-300: #F7C6D2;
+  --blush-primary: #E89BAA;
+  --blush-dark: #D47B8D;
   
-  --sage-accent: #C9DBC8;
-  --sage-dark: #3F5E3E;
-  --mauve-accent: #DFC9D9;
+  --sakura-leaf-1: #FFB7C5;
+  --sakura-leaf-2: #FCA1B3;
+  --wood-bark: #6E4F42;
+  --wood-deck: #DDB497;
   
-  --text-dark: #382C34;
-  --text-muted: #7E6E77;
-  --border-soft: #F0DDD6;
-  --border-focus: #E8A598;
+  --sage-accent: #C4DEC3;
+  --sage-dark: #375E36;
   
-  --shadow-sm: 0 4px 12px rgba(184, 140, 133, 0.08);
-  --shadow-md: 0 8px 24px rgba(184, 140, 133, 0.12);
+  --text-dark: #382A31;
+  --text-muted: #7A6972;
+  --border-soft: #F0D5DC;
+  --border-focus: #E89BAA;
+  
+  --shadow-sm: 0 4px 12px rgba(184, 133, 145, 0.09);
+  --shadow-md: 0 8px 24px rgba(184, 133, 145, 0.14);
   --radius-lg: 24px;
   --radius-md: 14px;
   --radius-pill: 999px;
@@ -29,15 +33,15 @@
   --font-display: 'Quicksand', system-ui, sans-serif;
 }
 
-/* Time of day background modifiers */
-body.theme-day { background-color: #FAF6F0; }
-body.theme-sunset { background-color: #F8EFEA; }
-body.theme-night { background-color: #26212B; color: #F5EEF0; }
+/* Time of Day Modifiers */
+body.theme-day { background-color: #FDF7F4; }
+body.theme-sunset { background-color: #FAEEEB; }
+body.theme-night { background-color: #241E28; color: #F7EEF2; }
 body.theme-night .card-panel,
-body.theme-night .study-control-card { background: #322A38; border-color: #4A3E52; color: #F5EEF0; }
+body.theme-night .study-control-card { background: #302636; border-color: #4A3A52; color: #F7EEF2; }
 body.theme-night .custom-input,
-body.theme-night .custom-select { background: #2A2330; color: #FFFFFF; border-color: #4A3E52; }
-body.theme-night .app-logo { filter: brightness(1.2); }
+body.theme-night .custom-select { background: #261D2B; color: #FFFFFF; border-color: #4A3A52; }
+body.theme-night .room-viewport { background: linear-gradient(180deg, #1C1721 0%, #302636 100%); border-color: #4A3A52; }
 
 * {
   box-sizing: border-box;
@@ -162,7 +166,7 @@ body {
 .nav-btn.active {
   background: var(--blush-primary);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(232, 165, 152, 0.4);
+  box-shadow: 0 2px 8px rgba(232, 155, 170, 0.4);
 }
 
 /* View Panels */
@@ -180,25 +184,119 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Living Room Viewport */
+/* ================= MINECRAFT / SAKURA VOXEL VIEWPORT ================= */
 .room-viewport {
   position: relative;
-  background: linear-gradient(180deg, rgba(252, 238, 233, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%);
-  border: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, #FDE6EC 0%, #FFF8FA 70%, #F5E8E5 100%);
+  border: 2px solid var(--border-soft);
   border-radius: var(--radius-lg);
-  padding: 1.5rem 1rem 1rem 1rem;
+  padding: 1.5rem 1rem 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: var(--shadow-md);
   margin-bottom: 1.25rem;
   overflow: hidden;
+  min-height: 275px;
+}
+
+/* Blocky / Pixel Scenery Background Layers */
+.pixel-scenery {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Voxel Clouds */
+.voxel-cloud {
+  position: absolute;
+  background: #FFFFFF;
+  opacity: 0.75;
+  box-shadow: 6px 6px 0 rgba(255, 230, 238, 0.6);
+}
+.cloud-1 {
+  top: 18px;
+  left: 30px;
+  width: 70px;
+  height: 16px;
+}
+.cloud-1::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  width: 40px;
+  height: 10px;
+  background: #FFFFFF;
+}
+
+.cloud-2 {
+  top: 32px;
+  right: 50px;
+  width: 90px;
+  height: 18px;
+}
+.cloud-2::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  width: 50px;
+  height: 12px;
+  background: #FFFFFF;
+}
+
+/* Block-Stepped Cherry Blossom Trees */
+.sakura-tree-bg {
+  position: absolute;
+  bottom: 38px;
+  width: 70px;
+  height: 120px;
+  background: var(--wood-bark);
+}
+
+.tree-left {
+  left: -15px;
+  width: 16px;
+  height: 90px;
+  box-shadow: 
+    16px -20px 0 var(--wood-bark),
+    24px -55px 0 35px var(--sakura-leaf-1),
+    10px -75px 0 25px var(--sakura-leaf-2),
+    35px -35px 0 20px #FFA8BB;
+}
+
+.tree-right {
+  right: -15px;
+  width: 16px;
+  height: 90px;
+  box-shadow: 
+    -16px -20px 0 var(--wood-bark),
+    -24px -55px 0 35px var(--sakura-leaf-1),
+    -10px -75px 0 25px var(--sakura-leaf-2),
+    -35px -35px 0 20px #FFA8BB;
+}
+
+/* Pixel Balcony / Deck Edge */
+.voxel-deck-rail {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 38px;
+  background: var(--wood-deck);
+  border-top: 3px solid var(--wood-bark);
+  box-shadow: inset 0 6px 0 rgba(110, 79, 66, 0.15);
 }
 
 .room-interactive-layer {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.85rem;
+  right: 0.85rem;
   display: flex;
   gap: 0.5rem;
   z-index: 2;
@@ -206,8 +304,8 @@ body {
 
 .interactive-prop {
   background: #FFFFFF;
-  border: 1px solid var(--border-soft);
-  border-radius: 50%;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 10px;
   width: 36px;
   height: 36px;
   font-size: 1.1rem;
@@ -228,6 +326,7 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
+  z-index: 1;
 }
 
 .speech-bubble {
@@ -237,11 +336,11 @@ body {
   font-weight: 600;
   padding: 0.5rem 1.1rem;
   border-radius: 14px;
-  border: 1px solid var(--border-soft);
+  border: 1.5px solid var(--border-soft);
   box-shadow: var(--shadow-sm);
   text-align: center;
   max-width: 90%;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
   position: relative;
 }
 
@@ -257,8 +356,8 @@ body {
 }
 
 .cat-svg-wrapper {
-  width: 290px;
-  height: 195px;
+  width: 310px;
+  height: 205px;
   cursor: pointer;
 }
 
@@ -269,32 +368,32 @@ body {
 
 /* Melog Living Animation Keyframes */
 .melog-figure {
-  transform-origin: 160px 170px;
+  transform-origin: 170px 170px;
   animation: melogBreathe 4s ease-in-out infinite;
 }
 
 .melog-tail {
-  transform-origin: 100px 160px;
-  animation: melogTail 4.8s ease-in-out infinite;
+  transform-origin: 85px 165px;
+  animation: melogTail 5s ease-in-out infinite;
 }
 
 @keyframes melogBreathe {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.018, 0.985); }
+  50% { transform: scale(1.015, 0.988); }
 }
 
 @keyframes melogTail {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(-6deg); }
+  50% { transform: rotate(-5deg); }
 }
 
 .celebrating .melog-figure {
-  animation: melogBounce 0.55s ease infinite alternate;
+  animation: melogBounce 0.5s ease infinite alternate;
 }
 
 @keyframes melogBounce {
   from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
+  to { transform: translateY(-8px); }
 }
 
 /* Cards & Dashboards */
@@ -418,7 +517,7 @@ label {
 .btn-primary {
   background: var(--blush-primary);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(232, 165, 152, 0.35);
+  box-shadow: 0 4px 14px rgba(232, 155, 170, 0.35);
 }
 
 .btn-primary:hover { background: var(--blush-dark); transform: translateY(-1px); }
@@ -428,7 +527,7 @@ label {
   color: var(--sage-dark);
 }
 
-.btn-secondary:hover { background: #BBD0B9; }
+.btn-secondary:hover { background: #B3D1B2; }
 
 .btn-subtle {
   background: var(--blush-200);
@@ -462,7 +561,7 @@ label {
 
 .meter-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--blush-primary), #EFA99C);
+  background: linear-gradient(90deg, var(--blush-primary), #F5A8B8);
   border-radius: var(--radius-pill);
   transition: width 0.4s ease;
 }
