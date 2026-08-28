@@ -2,8 +2,31 @@
    PURRMODORO - Complete Application Engine & Cloud Sync
    ------------------------------------------------------------- */
 
-// Medical School Curriculum Architecture
+// Medical School Curriculum Architecture with Distinct Subjects
 const MEDICAL_CURRICULUM = {
+  "🦴 OPP (Osteopathic Principles & Practice)": {
+    resources: [
+      "Savarese OMT Review",
+      "Foundations of Osteopathic Medicine",
+      "Nicholas & Nicholas Atlas of Osteopathic Techniques",
+      "OPP Lab Practical & Diagnostic Criteria"
+    ]
+  },
+  "🩺 CE (Clinical Education)": {
+    resources: [
+      "Bates' Guide to Physical Examination and History Taking",
+      "Clinical Education Syllabus & OSCE Rubrics",
+      "Physical Diagnosis Case Files",
+      "Doctor-Patient Communication & SOAP Notes"
+    ]
+  },
+  "👥 PBL (Problem-Based Learning)": {
+    resources: [
+      "PBL Case Learning Objectives",
+      "PBL Weekly Case Vignettes & Differentials",
+      "Clinical Case Wrap-Up & Pathophysiology"
+    ]
+  },
   "🫀 Pathology": {
     resources: [
       "Robbins & Cotran Pathologic Basis of Disease",
@@ -38,11 +61,11 @@ const MEDICAL_CURRICULUM = {
       "Cellular and Molecular Immunology"
     ]
   },
-  "🦴 Anatomy & OPP": {
+  "💀 Anatomy": {
     resources: [
       "Moore's Clinically Oriented Anatomy",
-      "Savarese OMT Review (OPP)",
-      "Netter's Atlas of Human Anatomy"
+      "Netter's Atlas of Human Anatomy",
+      "Rohen Color Atlas of Anatomy"
     ]
   },
   "🧪 Biochemistry & Genetics": {
@@ -51,17 +74,17 @@ const MEDICAL_CURRICULUM = {
       "Medical Genetics — Jorde"
     ]
   },
-  "🩺 Clinical Skills & PBL": {
-    resources: [
-      "Bates' Guide to Physical Examination",
-      "PBL Clinical Cases Syllabus",
-      "First Aid for USMLE/COMLEX Step 1"
-    ]
-  },
   "🧠 Anki / Spaced Repetition": {
     resources: [
       "AnKing Step 1 Comprehensive Deck",
       "Custom Subject Sub-Decks"
+    ]
+  },
+  "📖 Board Preparation": {
+    resources: [
+      "First Aid for the USMLE / COMLEX Step 1",
+      "COMBANK / TrueLearn Questions",
+      "UWorld Question Bank"
     ]
   }
 };
@@ -103,7 +126,7 @@ let state = {
     supaKey: ''
   },
   timer: {
-    mode: 'study', // 'study', 'shortBreak', 'longBreak'
+    mode: 'study',
     timeLeft: 25 * 60,
     isRunning: false,
     intervalId: null
@@ -186,6 +209,7 @@ function initCurriculumSelectors() {
   const subSelect = document.getElementById('sel-subject');
   const resSelect = document.getElementById('sel-resource');
 
+  subSelect.innerHTML = '';
   Object.keys(MEDICAL_CURRICULUM).forEach(sub => {
     const opt = document.createElement('option');
     opt.value = sub;
@@ -196,12 +220,14 @@ function initCurriculumSelectors() {
   const updateResources = () => {
     const selectedSub = subSelect.value;
     resSelect.innerHTML = '';
-    MEDICAL_CURRICULUM[selectedSub].resources.forEach(res => {
-      const opt = document.createElement('option');
-      opt.value = res;
-      opt.textContent = res;
-      resSelect.appendChild(opt);
-    });
+    if (MEDICAL_CURRICULUM[selectedSub]) {
+      MEDICAL_CURRICULUM[selectedSub].resources.forEach(res => {
+        const opt = document.createElement('option');
+        opt.value = res;
+        opt.textContent = res;
+        resSelect.appendChild(opt);
+      });
+    }
     updateTaskBanner();
   };
 
@@ -238,7 +264,7 @@ function initNavigation() {
   // Melog interactive click
   document.getElementById('melog-touch-target').addEventListener('click', () => {
     setMelogMood('purr', "Purrr! Melog loves studying medical school with you! 🐾");
-    playChime(587.33, 0.3); // D5 soft purr tone
+    playChime(587.33, 0.3);
   });
 
   document.getElementById('prop-lamp').addEventListener('click', () => {
@@ -326,14 +352,12 @@ function completeTimerBlock() {
   document.getElementById('btn-timer-pause').style.display = 'none';
 
   if (state.timer.mode === 'study') {
-    // Award Stats & Economy
     state.game.todayPomodoros++;
     state.game.totalPomodoros++;
     state.game.todayMinutes += state.settings.studyMin;
     state.game.pawPoints += 10;
     state.game.xp += 25;
 
-    // Check Level Up
     const newLevel = Math.floor(state.game.xp / 100) + 1;
     if (newLevel > state.game.level) {
       state.game.level = newLevel;
@@ -344,7 +368,6 @@ function completeTimerBlock() {
     state.game.activeDays[today] = (state.game.activeDays[today] || 0) + 1;
     if (state.game.activeDays[today] === 1) state.game.streak++;
 
-    // Add Session Log
     const sub = document.getElementById('sel-subject').value;
     const task = document.getElementById('ipt-chapter-task').value || 'Board Prep Focus';
     state.game.sessionLogs.unshift({
@@ -485,7 +508,6 @@ function initWorldAndCatalog() {
 }
 
 function renderWorld() {
-  // Wings Map
   const mapGrid = document.getElementById('world-map-grid');
   mapGrid.innerHTML = '';
   WORLD_WINGS.forEach(w => {
@@ -500,7 +522,6 @@ function renderWorld() {
     mapGrid.appendChild(cell);
   });
 
-  // Catalog
   const catalogGrid = document.getElementById('furniture-catalog-grid');
   catalogGrid.innerHTML = '';
   state.game.catalog.forEach(item => {
@@ -535,7 +556,6 @@ function renderWorld() {
 function renderStats() {
   document.getElementById('txt-stats-streak').textContent = `${state.game.streak} Day Study Streak`;
 
-  // Weekly dots
   const row = document.getElementById('weekly-tracker-row');
   row.innerHTML = '';
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -556,7 +576,6 @@ function renderStats() {
     row.appendChild(cell);
   }
 
-  // Session list
   const list = document.getElementById('session-log-list');
   list.innerHTML = '';
   if (state.game.sessionLogs.length === 0) {
@@ -625,12 +644,12 @@ function playChime(freq, dur) {
 
 function playCompletionFanfare() {
   if (!state.settings.soundEnabled) return;
-  playChime(659.25, 0.4); // E5
-  setTimeout(() => playChime(783.99, 0.4), 150); // G5
-  setTimeout(() => playChime(1046.50, 0.8), 300); // C6
+  playChime(659.25, 0.4);
+  setTimeout(() => playChime(783.99, 0.4), 150);
+  setTimeout(() => playChime(1046.50, 0.8), 300);
 }
 
-// --- LIVING AMBIENT PARTICLES (Spring / Fall / Winter Canvas) ---
+// --- LIVING AMBIENT PARTICLES ---
 function initAmbientCanvas() {
   const canvas = document.getElementById('ambient-canvas');
   const ctx = canvas.getContext('2d');
@@ -668,9 +687,9 @@ function initAmbientCanvas() {
         if (p.x > canvas.width) p.x = 0;
 
         ctx.beginPath();
-        if (season === 'spring') ctx.fillStyle = 'rgba(247, 196, 208, 0.45)'; // Petals
-        else if (season === 'fall') ctx.fillStyle = 'rgba(232, 165, 120, 0.4)'; // Leaves
-        else ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // Snow
+        if (season === 'spring') ctx.fillStyle = 'rgba(247, 196, 208, 0.45)';
+        else if (season === 'fall') ctx.fillStyle = 'rgba(232, 165, 120, 0.4)';
+        else ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
 
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -745,7 +764,7 @@ function initSettingsAndSync() {
   });
 }
 
-// REST-based Supabase Sync (Zero heavy client library required)
+// REST-based Supabase Sync
 async function syncWithSupabase() {
   const { supaUrl, supaKey } = state.settings;
   if (!supaUrl || !supaKey) {
@@ -757,7 +776,6 @@ async function syncWithSupabase() {
   badge.textContent = 'Syncing...';
 
   try {
-    // Read cloud record for 'melog_user'
     const res = await fetch(`${supaUrl}/rest/v1/purrmodoro_sync?id=eq.melog_user`, {
       headers: {
         'apikey': supaKey,
@@ -769,13 +787,11 @@ async function syncWithSupabase() {
       const data = await res.json();
       if (data && data.length > 0) {
         const cloudData = data[0].state_payload;
-        // Merge conflict resolution: keep whichever has higher total Pomodoros
         if (cloudData.game && cloudData.game.totalPomodoros > state.game.totalPomodoros) {
           state.game = cloudData.game;
         }
       }
 
-      // Upsert current local state to cloud
       await fetch(`${supaUrl}/rest/v1/purrmodoro_sync`, {
         method: 'POST',
         headers: {
